@@ -3,6 +3,7 @@ import { products, getProduct } from "../../data/products.js";
 import { formatCurrency as fm } from "../utils/money.js";
 import dayjs from "https://cdn.skypack.dev/dayjs@1.10.7";
 import {getDeliveryOption, deliveryOptions } from "../../data/deliveryOptions.js";
+import { renderPaymentSummary } from "./paymentsummary.js";
 
 
 export function renderOrderSummary() {
@@ -115,9 +116,9 @@ export function renderOrderSummary() {
             link.addEventListener('click', (event) => {
                 const productId = link.dataset.productId;
                 removeFromCart(productId);
-                const container = document.querySelector(
-                    `.js-cart-item-${productId}`);
-                container.remove();
+                renderOrderSummary();
+                renderPaymentSummary();
+                // No need to manually remove the element since we're re-rendering the entire order summary
             });
         });
 
@@ -127,6 +128,7 @@ export function renderOrderSummary() {
                 const { productId, deliveryOptionId } = element.dataset;
                 updateDeliveryDate(productId, deliveryOptionId);
                 renderOrderSummary();
+                renderPaymentSummary();
             });
         });
 }
