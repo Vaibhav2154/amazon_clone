@@ -1,8 +1,8 @@
 import { cart, removeFromCart, updateDeliveryDate } from "../../data/cart.js";
-import { products } from "../../data/products.js";
+import { products, getProduct } from "../../data/products.js";
 import { formatCurrency as fm } from "../utils/money.js";
 import dayjs from "https://cdn.skypack.dev/dayjs@1.10.7";
-import { deliveryOptions } from "../../data/deliveryoptions.js";
+import {getDeliveryOption, deliveryOptions } from "../../data/deliveryOptions.js";
 
 
 export function renderOrderSummary() {
@@ -14,23 +14,15 @@ export function renderOrderSummary() {
 
         const productId = cartItem.productId;
 
-        let matchingProduct;
-        products.forEach((productItem) => {
-            if (productId === productItem.id) {
-                matchingProduct = productItem;
-                return;
-            }
-        });
+        let matchingProduct = getProduct(productId);
+        if (!matchingProduct) {
+            console.error(`Product with ID ${productId} not found.`);
+            return;
+        }
 
         let deliveryOptionId = cartItem.deliveryOptionId;
-        let deliveryOption;
-        deliveryOptions.forEach((option) => {
-            if (deliveryOptionId === option.id) {
-                deliveryOption = option;
-                return;
-            }
-        }
-        );
+        let deliveryOption = getDeliveryOption(deliveryOptionId);
+        
 
         // Default to the first delivery option if none is found
         if (!deliveryOption && deliveryOptions.length > 0) {
