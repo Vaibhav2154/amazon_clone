@@ -1,4 +1,4 @@
-import { cart, removeFromCart } from "../data/cart.js";
+import { cart, removeFromCart,updateDeliveryDate  } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency as fm } from "./utils/money.js";
 import { hello } from "https://unpkg.com/supersimpledev@1.0.1/hello.esm.js";
@@ -32,7 +32,10 @@ cart.forEach((cartItem) => {
     }
     );
     
-
+    // Default to the first delivery option if none is found
+    if (!deliveryOption && deliveryOptions.length > 0) {
+        deliveryOption = deliveryOptions[1];
+    }
     
     const today = dayjs();
     const deliveryDate = today.add(deliveryOption.deliveryDays, 'days');
@@ -71,7 +74,7 @@ cart.forEach((cartItem) => {
                     </div>
                 </div>
 
-                <div class="delivery-options">
+                <div class="delivery-options ">
                     <div class="delivery-options-title">
                         Choose a delivery option:
                     </div>
@@ -93,7 +96,9 @@ function deliveryOptionsHTML(matchingProduct,cartItem) {
         const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
 
         optionHTML += `
-        <div class="delivery-option">
+        <div class="delivery-option js-delivery-options"
+            data-delivery-option-id="${deliveryOption.id}"
+            data-product-id="${matchingProduct.id}">
             <input type="radio" ${isChecked ? 'checked' : ''}
                 class="delivery-option-input"
                 name="delivery-option-${matchingProduct.id}">
@@ -121,5 +126,13 @@ document.querySelectorAll('.js-delete-link')
             const container = document.querySelector(
                 `.js-cart-item-${productId}`);
             container.remove();
+        });
+    });
+
+document.querySelectorAll('.js-delivery-options')
+    .forEach((element) => {
+        element.addEventListener('click', () => {
+            const {productId,deliveryOptionId} = element.dataset;
+            updateDeliveryDate(productId,deliveryOptionId);
         });
     });
