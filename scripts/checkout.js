@@ -5,10 +5,23 @@ import { loadProductsFetch } from "../data/products.js";
 // import '../data/backend-practice.js'
 
 
-loadProductsFetch().then(()=>{
+async function loadPage(){
+    console.log('Page loaded');
+    await loadProductsFetch();
     renderOrderSummary();
     renderPaymentSummary();
-});
+}
+
+loadPage();
+// loadPage().then(() => {
+//     console.log('Page loaded');
+// });
+
+
+// loadProductsFetch().then(()=>{
+//     renderOrderSummary();
+//     renderPaymentSummary();
+// });
 
 
 

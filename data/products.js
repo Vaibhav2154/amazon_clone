@@ -70,7 +70,7 @@ export function loadProductsFetch() {
       });;
       console.log('Loaded products');
 
-      fun();
+      // fun();
     });
 
   });
