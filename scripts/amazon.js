@@ -49,6 +49,8 @@ products.forEach((product) => {
         <img src="images/icons/checkmark.png">
         Added
         </div>
+        
+        ${product.extraInfoHTML()}
 
         <button class="add-to-cart-button
         button-primary 

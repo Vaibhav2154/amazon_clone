@@ -10,12 +10,12 @@ export function getProduct(productId) {
   return matchingProduct;
 }
 
-class Product{
-    id;
-    image;
-    name;
-    rating;
-    priceCents;
+class Product {
+  id;
+  image;
+  name;
+  rating;
+  priceCents;
 
   constructor(productDetails) {
     this.id = productDetails.id;
@@ -25,14 +25,35 @@ class Product{
     this.priceCents = productDetails.priceCents;
   }
 
-  getStartsUrl(){
+  getStartsUrl() {
     return `images/ratings/rating-${this.rating.stars * 10}.png`;
   }
 
-  getPrice(){
+  getPrice() {
     return `$${fm(this.priceCents)}`
   }
+
+  extraInfoHTML(){
+    return ``;
+  }
 }
+
+class clothing extends Product {
+  constructor(productDetails) {
+    super(productDetails);
+    this.sizeChartLink = productDetails.sizeChartLink;
+  }
+
+  extraInfoHTML(){
+    return `
+    <a href="${this.sizeChartLink}" target="_blank">
+    Size Chart
+    </a>
+    `
+  }
+}
+
+
 
 export const products = [
   {
@@ -693,7 +714,11 @@ export const products = [
       "mens"
     ]
   }
-].map((productDetails) =>{
+].map((productDetails) => {
+  if(productDetails.type === "clothing") {
+    return new clothing(productDetails);
+  }
+
   return new Product(productDetails);
 });
 
