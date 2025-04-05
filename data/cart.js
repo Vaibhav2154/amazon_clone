@@ -1,8 +1,6 @@
-export let cart = localStorage.getItem('cart') ?
-    JSON.parse(localStorage.getItem('cart')) :
-    [];
+export let cart;
 
-
+loadFromStorage();
     
 export function addToCart(productId) {
     let matchingItem;
@@ -49,4 +47,10 @@ export function updateDeliveryDate(productID,deliveryOptionId){
     });
     matchingItem.deliveryOptionId = deliveryOptionId;
     saveToStorage();
+}
+
+export function loadFromStorage() {
+    cart = localStorage.getItem('cart') ?
+    JSON.parse(localStorage.getItem('cart')) :
+    [];
 }
